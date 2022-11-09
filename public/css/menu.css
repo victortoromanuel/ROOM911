@@ -1,0 +1,51 @@
+#title {
+    background-color: rgb(228, 228, 228);
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    vertical-align: middle;
+    line-height: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#time {
+    display: inline-block;
+    height: 50px;
+    vertical-align: left;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: blue;
+}
+
+#username {
+    display: inline-block;
+    height: 50px;
+    vertical-align: right;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: blue;
+}
+
+.table {
+    border: 0.5px solid #000000;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    border: 0.5px solid #000000;
+}
+
+td, th {
+    text-align: center; 
+    vertical-align: middle;
+}
+
+#employeeid, #department, #date, #button {
+    font-size: 11pt;
+}
