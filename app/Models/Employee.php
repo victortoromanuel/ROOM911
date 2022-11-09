@@ -11,6 +11,8 @@ class Employee extends Model
 
     protected $primaryKey = 'id_employee';
 
+    protected $fillable = ['id_number', 'firstname', 'lastname', 'access', 'id_department'];
+
     public function access(){
         return $this->hasMany(Employee::class, 'id_access', 'id_employee');
     }

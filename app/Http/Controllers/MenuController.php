@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Department;
 use DateTime;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MenuController extends Controller
 {

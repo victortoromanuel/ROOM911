@@ -49,3 +49,17 @@ td, th {
 #employeeid, #department, #date, #button {
     font-size: 11pt;
 }
+
+#load {
+    position: absolute; 
+    height: 35px;
+    line-height: 30px;
+    right: 115px;
+    top: 225px;
+    margin: 0;
+    padding: 0;
+    background: rgb(69, 194, 69);
+    color: white;
+    border: none;
+    width: 10%;
+  }

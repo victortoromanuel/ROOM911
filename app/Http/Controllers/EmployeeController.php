@@ -6,6 +6,9 @@ use App\Models\Employee;
 use App\Models\Department;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\EmployeesImport;
+use League\Csv\Reader;
 
 class EmployeeController extends Controller
 {
@@ -31,10 +34,12 @@ class EmployeeController extends Controller
         $employee->access = (int) $request->access;
 
         $employee->save();
+        $message = "Employee was created succesfully";
         
-        return redirect()->route('employee')->with('success', 'Employee was created succesfully');
+        return redirect()->route('employee')->with('message', $message);
     }
 
+    #View update
     public function show($id_employee){
         $departments = Department::all();
         $employee = Employee::find($id_employee);
@@ -59,9 +64,20 @@ class EmployeeController extends Controller
         $employee->access = (int) $request->access;
 
         $employee->save();
-
-        return redirect()->route('update', [$id_employee])->with('success', 'Employee was updated succesfully');
+        $message = "Employee was updated succesfully";
+        return redirect()->route('update', [$id_employee])->with('message', $message);
     }
 
+    public function importView(){
+        return view('import.import');
+    }
 
+    public function uploadEmployees(Request $request){
+        if ($request->file->isValid()){
+            $import = new EmployeesImport();
+            Excel::import($import, $request->file);
+        }
+        $message = "Employees imported successfully";
+        return redirect()->route('import')->with("message", $message);
+    }
 }

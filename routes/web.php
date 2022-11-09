@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminRoom911Controller;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\AccessController;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,12 @@ Route::post('/admin', [AdminRoom911Controller::class, 'store'])->name('admin');
 Route::get('/menu/{id_admin_room_911}', [MenuController::class, 'index'])->name('menu');
 
 Route::post('/menu/{id_admin_room_911}', [MenuController::class, 'filter'])->name('menu-edit');
+
+#Route::post('/employee', [EmployeeController::class, 'uploadEmployees'])->name('employee-upload');
+
+Route::get('/import', [EmployeeController::class, 'importView'])->name('import');
+
+Route::post('/import', [EmployeeController::class, 'uploadEmployees'])->name('employee-upload');
 
 Route::get('/history', function () {
     return view('history.history');

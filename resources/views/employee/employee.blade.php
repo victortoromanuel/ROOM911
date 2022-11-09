@@ -13,6 +13,11 @@
 </head>
 <body>
     <div class="container w-25 border p-4 mt-6">
+        @if(session("message"))
+            <div class="alert alert-success" role="alert">
+                {{session('message')}}
+            </div>
+        @endif
         <br>
         <p>Register employee</p>
         <br>
@@ -46,7 +51,8 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
-            </form>
+        </form>
+        
     </div>
 </body>
 </html>

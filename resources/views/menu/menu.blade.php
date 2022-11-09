@@ -63,13 +63,17 @@
         </form>
         <hr>
         <div class="row">
-            <div class="col-7"></div>
+            <div class="col-2"></div>
             <div class="col-3">
                 <a type="button" href="{{ route('admin') }}" class="btn btn-primary">New admin room 911</a>
             </div>
             <div class="col-2">
                 <a type="button" href="{{ route('employee') }}" class="btn btn-primary">New employee</a>
             </div>
+            <div class="col-5">
+                <a type="button" href="{{ route('import') }}" class="btn btn-primary">New employees by CSV file</a>
+            </div>
+
         </div>
         <br>
         <!-- CRUD -->
