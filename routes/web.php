@@ -20,11 +20,7 @@ use Maatwebsite\Excel\Row;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/menu', function () {
-    return view('menu.menu');
+    return view('login.login');
 });
 
 Route::get('/login', function () {
@@ -55,12 +51,20 @@ Route::get('/menu/{id_admin_room_911}', [MenuController::class, 'index'])->name(
 
 Route::post('/menu/{id_admin_room_911}', [MenuController::class, 'filter'])->name('menu-edit');
 
-#Route::post('/employee', [EmployeeController::class, 'uploadEmployees'])->name('employee-upload');
-
 Route::get('/import', [EmployeeController::class, 'importView'])->name('import');
 
 Route::post('/import', [EmployeeController::class, 'uploadEmployees'])->name('employee-upload');
 
-Route::get('/history', function () {
+Route::patch('/disable/{id_employee}/{id_admin_room_911}', [MenuController::class, 'disable'])->name('disable');
+
+Route::patch('/enable/{id_employee}/{id_admin_room_911}', [MenuController::class, 'enable'])->name('enable');
+
+/*Route::get('/history', function () {
     return view('history.history');
-});
+});*/
+
+Route::get('history/{id_employee}', [MenuController::class, 'historyView'])->name('history');
+
+#Route::get('history-export/{id_employee}', [MenuController::class, 'historyExport'])->name('history');
+
+Route::post('history/{id_employee}', [MenuController::class, 'accessFilter'])->name('history-filter');

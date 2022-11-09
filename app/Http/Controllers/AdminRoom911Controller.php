@@ -29,8 +29,8 @@ class AdminRoom911Controller extends Controller
         $admin->password = $request->password;
 
         $admin->save();
-        
-        return redirect()->route('admin')->with('success', 'Administrator of ROOM 911 was created succesfully');
+        $message = "Administrator of ROOM 911 was created succesfully";
+        return redirect()->route('admin')->with('message', $message);
     }
 
     public function login(Request $request){

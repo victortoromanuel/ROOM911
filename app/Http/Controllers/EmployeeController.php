@@ -64,7 +64,7 @@ class EmployeeController extends Controller
         $employee->access = (int) $request->access;
 
         $employee->save();
-        $message = "Employee was updated succesfully";
+        $message = "Employees was updated succesfully";
         return redirect()->route('update', [$id_employee])->with('message', $message);
     }
 

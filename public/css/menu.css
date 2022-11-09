@@ -63,3 +63,7 @@ td, th {
     border: none;
     width: 10%;
   }
+
+#back {
+    width: 80%;
+}

@@ -31,11 +31,7 @@
         <form action="{{ route('menu-edit', ['id_admin_room_911' => $id_admin_room_911]) }}" method="POST">
             @csrf
             <div class="row">
-                <div class="col-5"></div>
-                <div class="col-2">Initial access date:</div>
-                <div class="col-2">Final access date:</div>
-            </div>
-            <div class="row">
+                <div class="col-4"></div>
                 <div class="col-2">
                     <input id="employeeid" name="employeeid" class="form-control rounded-pill" type="search" placeholder="Search by employee">
                 </div>
@@ -47,12 +43,12 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
+                <!--<div class="col-2">
                     <input id="date1" name="date1" onchange="requiredTrue('date2')" class="form-control" type="date" placeholder="Initial access date">
                 </div>
                 <div class="col-2">
                     <input id="date2" name="date2" onchange="requiredTrue('date1')" class="form-control" type="date" placeholder="Final access date">
-                </div>
+                </div>-->
                 <div class="col-1">
                     <button id="button" type="submit" class="btn btn-secondary">Filter</button>
                 </div>
@@ -63,20 +59,28 @@
         </form>
         <hr>
         <div class="row">
-            <div class="col-2"></div>
+            <div class="col-1"></div>
+            <div class="col-3">
+                <a type="button" href="{{ route('access') }}" class="btn btn-primary">Access simulator</a>
+            </div>
             <div class="col-3">
                 <a type="button" href="{{ route('admin') }}" class="btn btn-primary">New admin room 911</a>
             </div>
             <div class="col-2">
                 <a type="button" href="{{ route('employee') }}" class="btn btn-primary">New employee</a>
             </div>
-            <div class="col-5">
+            <div class="col-3">
                 <a type="button" href="{{ route('import') }}" class="btn btn-primary">New employees by CSV file</a>
             </div>
 
         </div>
         <br>
         <!-- CRUD -->
+        @if(session("message") && session("alert"))
+            <div class="alert alert-{{ session('alert') }}" role="alert">
+                {{session('message')}}
+            </div>
+        @endif
         <div class="row">
             <table class="table table-bordered">
                 <thead class="thead secondary">
@@ -99,9 +103,18 @@
                                 <td style='white-space: nowrap' class="table-active">
                                 <div class="d-flex">
                                     <a type="button" href="/update/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
-                                    <button type="button" class="btn btn-secondary btn-md mx-3">Disable</button>
-                                    <button type="button" class="btn btn-warning btn-md mx-3">History</button>
-                                    <button type="button" class="btn btn-danger btn-md mx-3">Delete</button>
+                                    <form action="/enable/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
+                                        @method('PATCH')
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-md mx-3">Enable</button>
+                                    </form>
+                                    <form action="/disable/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
+                                        @method('PATCH')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-md mx-3">Disable</button>
+                                    </form>
+                                    <a type="button" href="/history/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
+                                    <!--<button type="button" class="btn btn-danger btn-md mx-3">Delete</button>-->
                                 </div>
                             </tr> 
                         @else
@@ -114,9 +127,18 @@
                                 <td style='white-space: nowrap'>
                                 <div class="d-flex">
                                     <a type="button" href="/update/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
-                                    <button type="button" class="btn btn-secondary btn-md mx-3">Disable</button>
-                                    <button type="button" class="btn btn-warning btn-md mx-3">History</button>
-                                    <button type="button" class="btn btn-danger btn-md mx-3">Delete</button>
+                                    <form action="/enable/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
+                                        @method('PATCH')
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-md mx-3">Enable</button>
+                                    </form>
+                                    <form action="/disable/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
+                                        @method('PATCH')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-md mx-3">Disable</button>
+                                    </form>
+                                    <a type="button" href="/history/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
+                                    <!--<button type="button" class="btn btn-danger btn-md mx-3">Delete</button>-->
                                 </div>
                             </tr>     
                         @endif     

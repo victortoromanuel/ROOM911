@@ -14,9 +14,12 @@
 <body>
     <div class="container w-25 border p-4 mt-5">
         @if(session("message"))
+            <input class='btn btn-info' onClick="history.go(-2);" value="Back" id="back">
             <div class="alert alert-success" role="alert">
                 {{session('message')}}
             </div>
+        @else
+            <input class='btn btn-info' onClick="history.go(-1);" value="Back" id="back">
         @endif
         <br>
         <p>Register employees by CSV file</p>

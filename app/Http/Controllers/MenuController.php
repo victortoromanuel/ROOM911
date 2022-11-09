@@ -6,9 +6,15 @@ use App\Models\Access;
 use App\Models\Admin_room_911;
 use App\Models\Employee;
 use App\Models\Department;
+use Barryvdh\DomPDF\Facade\Pdf;
+#use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use DateTime;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Dompdf\Dompdf;
+use Svg\Tag\Rect;
+
+#use PDF;
 
 class MenuController extends Controller
 {
@@ -51,38 +57,19 @@ class MenuController extends Controller
         $employees_filtered = Employee::all();
         $search_flag = is_null($request->employeeid);
         $department_flag = $request->department == "null";
-        $date_flag = is_null($request->date1) and is_null($request->date2);
+        #$date_flag = is_null($request->date1) and is_null($request->date2);
 
         switch (true) {
-            case (!$search_flag and $department_flag and $date_flag):
+            case (!$search_flag and $department_flag):
                 $employees_filtered = Employee::where('firstname','like', '%' . $request->employeeid . '%')
                                                 ->orWhere('lastname','like', '%' . $request->employeeid . '%')
                                                 ->orWhere('id_number','=', $request->employeeid)->get();
                 break;
-            case ($search_flag and !$department_flag and $date_flag):
+            case ($search_flag and !$department_flag):
                 $employees_filtered = Employee::where('id_department', $request->department)->get();
                 break;
-            case ($search_flag and $department_flag and !$date_flag):
-                $access = Access::whereBetween('attempt_datetime', [$request->date1, $request->date2])->whereNotNull('id_employee')->get('id_employee')->toArray();
-                $ids_employees = array_values($access);
-                $employees_filtered = Employee::whereIn('id_employee', $ids_employees)->get();
-                break;
-            case (!$search_flag and !$department_flag and $date_flag):
+            case (!$search_flag and !$department_flag):
                 $employees_filtered = Employee::where('id_department', $request->department)
-                                                ->where('firstname','like', '%' . $request->employeeid . '%')
-                                                ->orWhere('lastname','like', '%' . $request->employeeid . '%')
-                                                ->orWhere('id_number','=', $request->employeeid)->get();
-                break;
-            case ($search_flag and !$department_flag and !$date_flag):
-                $access = Access::whereBetween('attempt_datetime', [$request->date1, $request->date2])->whereNotNull('id_employee')->get('id_employee')->toArray();
-                $ids_employees = array_values($access);
-                $employees_filtered = Employee::whereIn('id_employee', $ids_employees)
-                                                ->where('id_department', $request->department)->get();
-                break;
-            case (!$search_flag and $department_flag and !$date_flag):
-                $access = Access::whereBetween('attempt_datetime', [$request->date1, $request->date2])->whereNotNull('id_employee')->get('id_employee')->toArray();
-                $ids_employees = array_values($access);
-                $employees_filtered = Employee::whereIn('id_employee', $ids_employees)
                                                 ->where('firstname','like', '%' . $request->employeeid . '%')
                                                 ->orWhere('lastname','like', '%' . $request->employeeid . '%')
                                                 ->orWhere('id_number','=', $request->employeeid)->get();
@@ -90,5 +77,56 @@ class MenuController extends Controller
         }
         
         return $this->index($id_admin_room_911, $employees_filtered);
+    }
+
+    public function enable($id_employee, $id_admin_room_911){
+        $employee = Employee::find($id_employee);
+        $employee->access = 1;
+        $employee->save();
+        $message = "Access enable to " . $employee->firstname . " " . $employee->lastname;
+        $alert = "success";
+        return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
+    }
+
+    public function disable($id_employee, $id_admin_room_911){
+        $employee = Employee::find($id_employee);
+        $employee->access = 0;
+        $employee->save();
+        $message = "Access denied to " . $employee->firstname . " " . $employee->lastname;
+        $alert = "warning";
+        return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
+    }
+
+    public function historyView(Request $request, $id_employee){
+        $employee = Employee::find($id_employee);
+        $accesses = Access::where('id_employee', $id_employee)->get();
+
+        $n_access = count($accesses->toArray());
+        if($request->get("export")==1){
+            $data = ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access];
+            $pdf = Pdf::loadView('history.history', $data);
+            ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
+            set_time_limit(300);
+            return $pdf->download('accesses.pdf');
+        }
+        return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access]);
+    }
+
+    public $accesses_filtered = null;
+
+    public function accessFilter(Request $request, $id_employee){
+        $employee = Employee::find($id_employee);
+        $accesses = Access::where('id_employee', $id_employee)->get();
+        $date_flag = is_null($request->date1) and is_null($request->date2);
+        $n_access = 0;
+        if (!$date_flag){
+            $accesses = Access::whereBetween('attempt_datetime', [$request->date1, $request->date2])->where('id_employee', $id_employee)->get();
+            $n_access = count($accesses->toArray());
+        }
+
+        $this->accesses_filtered = $accesses;
+
+        return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access]);
+        #return $this->historyView($request, $id_employee, $accesses_filtered);
     }
 }
