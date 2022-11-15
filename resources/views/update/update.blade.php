@@ -64,6 +64,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
+        <br>
         <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
     </div>
 </body>

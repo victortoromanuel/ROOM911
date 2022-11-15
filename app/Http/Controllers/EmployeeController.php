@@ -13,7 +13,7 @@ use League\Csv\Reader;
 
 class EmployeeController extends Controller
 {
-    //
+    //GET Add new employee view
     public function index($id_admin_room_911){
         $admin = Admin_room_911::find($id_admin_room_911);
         if (isset($_COOKIE[$admin->username])){
@@ -25,6 +25,7 @@ class EmployeeController extends Controller
         }
     }
 
+    //POST Add a new employee request
     public function store(Request $request, $id_admin_room_911){
 
         $request->validate([
@@ -53,7 +54,7 @@ class EmployeeController extends Controller
         return redirect()->route('employee', [$id_admin_room_911])->with('message', $message)->with("alert", $alert);
     }
 
-    #View update
+    //GET update employees view
     public function show($id_admin_room_911, $id_employee){
         $admin = Admin_room_911::find($id_admin_room_911);
         if (isset($_COOKIE[$admin->username])){
@@ -67,13 +68,14 @@ class EmployeeController extends Controller
         }
     }
 
+    //PATCH Update employees data request
     public function update(Request $request, $id_admin_room_911, $id_employee){
 
-        /*$request->validate([
+        $request->validate([
             'employeeid' => 'required|min:7',
             'firstname' => 'required|min:3',
             'lastname' => 'required|min:3'
-        ]);*/
+        ]);
         
         $employee = Employee::find($id_employee);
         $employee->id_number = (int) $request->employeeid;
@@ -87,6 +89,7 @@ class EmployeeController extends Controller
         return redirect()->route('update', [$id_admin_room_911, $id_employee])->with('message', $message);
     }
 
+    //GET Import employees by csv file view
     public function importView($id_admin_room_911){
         $admin = Admin_room_911::find($id_admin_room_911);
         if (isset($_COOKIE[$admin->username])){
@@ -97,10 +100,11 @@ class EmployeeController extends Controller
         }
     }
 
+    //POST Import employees by csv file request
     public function uploadEmployees(Request $request, $id_admin_room_911){
         if ($request->file->isValid()){
-            $import = new EmployeesImport();
-            Excel::import($import, $request->file);
+            $import = new EmployeesImport(); #Imports/EmployeesImport.php
+            Excel::import($import, $request->file); 
             $message = "Employees imported successfully";
         }
         else {

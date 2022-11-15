@@ -32,8 +32,8 @@
         <form action="{{ route('menu-edit', ['id_admin_room_911' => $id_admin_room_911]) }}" method="POST">
             @csrf
             <div class="row">
-                <div class="col-4"></div>
-                <div class="col-2">
+                <div class="col-3"></div>
+                <div class="col-3">
                     <input id="employeeid" name="employeeid" class="form-control rounded-pill" type="search" placeholder="Search by employee">
                 </div>
                 <div class="col-3">
@@ -60,8 +60,8 @@
         </form>
         <hr>
         <div class="row">
-            <div class="col-1"></div>
-            <div class="col-3">
+            
+            <div class="col-2">
                 <a type="button" href="{{ route('access') }}" class="btn btn-primary">Access simulator</a>
             </div>
             <div class="col-3">

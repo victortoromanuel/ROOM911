@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Redis;
 
 class AdminRoom911Controller extends Controller
 {
-    //
+    //GET Add new admin view
     public function index($id_admin_room_911){
         $admin = Admin_room_911::find($id_admin_room_911);
         if (isset($_COOKIE[$admin->username])){
@@ -22,6 +22,7 @@ class AdminRoom911Controller extends Controller
         }
     }
 
+    //POST Add new admin request
     public function store(Request $request, $id_admin_room_911){
 
         $request->validate([
@@ -48,6 +49,7 @@ class AdminRoom911Controller extends Controller
         return redirect()->route('admin', [$id_admin_room_911])->with('message', $message)->with("alert", $alert);
     }
 
+    //POST Log in system request
     public function login(Request $request){
         $request->validate([
             'username' => 'required|min:3',
@@ -57,7 +59,7 @@ class AdminRoom911Controller extends Controller
         $message = "";
         $admin = Admin_room_911::where('username', $request->username)->where('password', $request->password)->first();
         if ($admin != null){
-            setcookie($admin->username, "menu", time() + 300,'/'); #5 minutes per session
+            setcookie($admin->username, "menu", time() + 300,'/'); #Set session for 5 minutes
             return redirect()->route("menu", [$admin->id_admin_room_911]);
         }
         else {

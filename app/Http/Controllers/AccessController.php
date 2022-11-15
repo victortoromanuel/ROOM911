@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AccessController extends Controller
 {
-    //
+    //POST add new access request
     public function store(Request $request){
 
         $request->validate([

@@ -19,7 +19,7 @@ use Svg\Tag\Rect;
 
 class MenuController extends Controller
 {
-    //
+    //GET Employees information view
     public function index($key, $employees_filtered = null){
         $admin = Admin_room_911::find($key);
         #$gate = Gate::forUser($admin)->allows('admin-room-911', $admin);
@@ -64,7 +64,7 @@ class MenuController extends Controller
         return redirect('/');
     }
 
-    #This function apply the filter by search, department and date range
+    //This function apply the filter by search and department
     public function filter(Request $request, $id_admin_room_911){ 
         $employees_filtered = Employee::all();
         $search_flag = is_null($request->employeeid);
@@ -90,6 +90,7 @@ class MenuController extends Controller
         return $this->index($id_admin_room_911, $employees_filtered);
     }
 
+    //POST Enable access to employee request
     public function enable($id_employee, $id_admin_room_911){
         $employee = Employee::find($id_employee);
         $employee->access = 1;
@@ -99,6 +100,7 @@ class MenuController extends Controller
         return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
     }
 
+    //POST Disable access to employee request
     public function disable($id_employee, $id_admin_room_911){
         $employee = Employee::find($id_employee);
         $employee->access = 0;
@@ -108,6 +110,7 @@ class MenuController extends Controller
         return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
     }
 
+    //POST Delete employee request
     public function delete($id_employee, $id_admin_room_911){
         $employee = Employee::find($id_employee);
         $employee->delete();
@@ -116,6 +119,7 @@ class MenuController extends Controller
         return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
     }
 
+    //GET Access history view
     public function historyView(Request $request, $id_admin_room_911, $id_employee){
         $admin = Admin_room_911::find($id_admin_room_911);
         if (isset($_COOKIE[$admin->username])){
@@ -139,6 +143,7 @@ class MenuController extends Controller
 
     public $accesses_filtered = null;
 
+    //POST Access history filter
     public function accessFilter(Request $request, $id_employee){
         $employee = Employee::find($id_employee);
         $accesses = Access::where('id_employee', $id_employee)->get();
@@ -152,6 +157,5 @@ class MenuController extends Controller
         $this->accesses_filtered = $accesses;
 
         return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access]);
-        #return $this->historyView($request, $id_employee, $accesses_filtered);
     }
 }
