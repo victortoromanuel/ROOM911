@@ -15,7 +15,7 @@
     <br><br><br><br>
     <div class="container w-25 border p-5 mt-4">
         @if(session("message") && session("attempt_access"))
-            <input class='btn btn-info' onClick="history.go(-2);" value="Back" id="back">
+            <a class='btn btn-info' onClick="history.go(-2);" value="Back" id="back">
             <div class="alert alert-{{session('attempt_access')}}" role="alert">
                 {{session('message')}}
             </div>

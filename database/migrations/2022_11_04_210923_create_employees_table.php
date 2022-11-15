@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id('id_employee');
-            $table->integer('id_number');
+            $table->integer('id_number')->unique();
             $table->string('firstname');
             $table->string('lastname');
             $table->boolean('access');

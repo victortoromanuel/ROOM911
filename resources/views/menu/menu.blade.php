@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <script src="{{URL::asset('js/menu.js')}}"></script>
+
 </head>
 <body onload="showTime()">
     <!-- Title, time and username -->
@@ -64,13 +65,13 @@
                 <a type="button" href="{{ route('access') }}" class="btn btn-primary">Access simulator</a>
             </div>
             <div class="col-3">
-                <a type="button" href="{{ route('admin') }}" class="btn btn-primary">New admin room 911</a>
+                <a type="button" href="/admin/{{ $id_admin_room_911 }}" class="btn btn-primary">New admin room 911</a>
             </div>
             <div class="col-2">
-                <a type="button" href="{{ route('employee') }}" class="btn btn-primary">New employee</a>
+                <a type="button" href="/employee/{{ $id_admin_room_911 }}" class="btn btn-primary">New employee</a>
             </div>
             <div class="col-3">
-                <a type="button" href="{{ route('import') }}" class="btn btn-primary">New employees by CSV file</a>
+                <a type="button" href="/import/{{ $id_admin_room_911 }}" class="btn btn-primary">New employees by CSV file</a>
             </div>
 
         </div>
@@ -114,7 +115,11 @@
                                         <button type="submit" class="btn btn-danger btn-md mx-3">Disable</button>
                                     </form>
                                     <a type="button" href="/history/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
-                                    <!--<button type="button" class="btn btn-danger btn-md mx-3">Delete</button>-->
+                                    <form action="/delete/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-md mx-3">Delete</button>
+                                    </form>
                                 </div>
                             </tr> 
                         @else
@@ -138,7 +143,11 @@
                                         <button type="submit" class="btn btn-danger btn-md mx-3">Disable</button>
                                     </form>
                                     <a type="button" href="/history/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
-                                    <!--<button type="button" class="btn btn-danger btn-md mx-3">Delete</button>-->
+                                    <form action="/delete/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-md mx-3">Delete</button>
+                                    </form>
                                 </div>
                             </tr>     
                         @endif     

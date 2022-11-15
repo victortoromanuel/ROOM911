@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('admin_room_911s', function (Blueprint $table) {
             $table->id('id_admin_room_911');
-            $table->string('username');
-            $table->string('password');
+            $table->string('username')->unique();
+            $table->string('password')->unique();
             $table->timestamps();
 
             $table->foreignId('id_employee')->references('id_employee')->on('employees');

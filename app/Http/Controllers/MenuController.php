@@ -12,6 +12,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Gate;
 use Svg\Tag\Rect;
 
 #use PDF;
@@ -20,36 +21,46 @@ class MenuController extends Controller
 {
     //
     public function index($key, $employees_filtered = null){
-        $departments = Department::all();
-        if ($employees_filtered == null){
-            $employees = Employee::all();
-        }
-        else {
-            $employees = $employees_filtered;
-        }
-        $id_admin_room_911 = $key;
         $admin = Admin_room_911::find($key);
-        $admin_username = strtoupper($admin->username);
-        $employees_array = [];
-        for ($i = 0; $i < count($employees); $i++) { 
-            $info = [];
-            $get_department = Department::find($employees[$i]->id_department);
-            $access = Access::where('id_employee', $employees[$i]->id_employee)->get()->toArray();
-            $info[0] = $employees[$i]->id_employee;
-            $info[1] = $employees[$i]->id_number;
-            $info[2] = $employees[$i]->firstname;
-            $info[3] = $employees[$i]->lastname;
-            $info[4] = $get_department->department_name;
-            $info[5] = count($access);
-            $info[6] = $i;
-            $employees_array[$i] = $info;
-        }
+        #$gate = Gate::forUser($admin)->allows('admin-room-911', $admin);
+        #echo $_COOKIE;
+        #print_r($_COOKIE);
+        #print_r(isset($_COOKIE[$admin->username]));
+        #unset($_COOKIE);
+        #setcookie($admin->username, 'menu', time() - 3600, '/');
         
-        return view('menu.menu', ['employees' => $employees, 
-                                  'departments' => $departments, 
-                                  'employees_array' => $employees_array,
-                                  'admin_username' => $admin_username,
-                                  'id_admin_room_911' => $id_admin_room_911]);
+        if (isset($_COOKIE[$admin->username])){
+            $departments = Department::all();
+            if ($employees_filtered == null){
+                $employees = Employee::all();
+            }
+            else {
+                $employees = $employees_filtered;
+            }
+            $id_admin_room_911 = $key;
+            $admin_username = strtoupper($admin->username);
+            $employees_array = [];
+            for ($i = 0; $i < count($employees); $i++) { 
+                $info = [];
+                $get_department = Department::find($employees[$i]->id_department);
+                $access = Access::where('id_employee', $employees[$i]->id_employee)->get()->toArray();
+                $info[0] = $employees[$i]->id_employee;
+                $info[1] = $employees[$i]->id_number;
+                $info[2] = $employees[$i]->firstname;
+                $info[3] = $employees[$i]->lastname;
+                $info[4] = $get_department->department_name;
+                $info[5] = count($access);
+                $info[6] = $i;
+                $employees_array[$i] = $info;
+            }
+            
+            return view('menu.menu', ['employees' => $employees, 
+                                    'departments' => $departments, 
+                                    'employees_array' => $employees_array,
+                                    'admin_username' => $admin_username,
+                                    'id_admin_room_911' => $id_admin_room_911]);
+        }
+        return redirect('/');
     }
 
     #This function apply the filter by search, department and date range
@@ -57,7 +68,6 @@ class MenuController extends Controller
         $employees_filtered = Employee::all();
         $search_flag = is_null($request->employeeid);
         $department_flag = $request->department == "null";
-        #$date_flag = is_null($request->date1) and is_null($request->date2);
 
         switch (true) {
             case (!$search_flag and $department_flag):
@@ -93,6 +103,14 @@ class MenuController extends Controller
         $employee->access = 0;
         $employee->save();
         $message = "Access denied to " . $employee->firstname . " " . $employee->lastname;
+        $alert = "warning";
+        return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
+    }
+
+    public function delete($id_employee, $id_admin_room_911){
+        $employee = Employee::find($id_employee);
+        $employee->delete();
+        $message = "Employee " . $employee->firstname . " " . $employee->lastname . "has been deleted";
         $alert = "warning";
         return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
     }

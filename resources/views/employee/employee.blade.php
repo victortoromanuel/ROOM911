@@ -13,19 +13,16 @@
 </head>
 <body>
     <div class="container w-25 border p-4 mt-6">
-        
+        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
         @if(session("message"))
-            <input class='btn btn-info' onClick="history.go(-2);" value="Back" id="back">
             <div class="alert alert-success" role="alert">
                 {{session('message')}}
             </div>
-        @else
-            <input class='btn btn-info' onClick="history.go(-1);" value="Back" id="back">
         @endif
         <br>
         <p>Register employee</p>
         <br>
-        <form action="{{ route('employee') }}" method="POST">
+        <form action="{{ route('employee-store', ['id_admin_room_911' => $id_admin_room_911]) }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="employeeid" class="form-label">ID employee</label>

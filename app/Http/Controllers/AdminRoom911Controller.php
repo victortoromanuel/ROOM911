@@ -11,18 +11,24 @@ use Illuminate\Support\Facades\Redis;
 class AdminRoom911Controller extends Controller
 {
     //
-    public function index(){
-        $employees = Employee::all();
-        return view('admin.admin', ['employees' => $employees]);
+    public function index($id_admin_room_911){
+        $admin = Admin_room_911::find($id_admin_room_911);
+        if (isset($_COOKIE[$admin->username])){
+            $employees = Employee::all();
+            return view('admin.admin', ['employees' => $employees, 'id_admin_room_911' => $id_admin_room_911]);
+        }
+        else{
+            return redirect('/');
+        }
     }
 
-    public function store(Request $request){
+    public function store(Request $request, $id_admin_room_911){
 
         $request->validate([
             'username' => 'required|min:4',
             'password' => 'required|min:4'
         ]);
-
+        #$id_admin_room_911 = $request->key;
         $admin = new Admin_room_911();
         $admin->id_employee = (int) $request->employeeid;
         $admin->username = $request->username;
@@ -30,7 +36,7 @@ class AdminRoom911Controller extends Controller
 
         $admin->save();
         $message = "Administrator of ROOM 911 was created succesfully";
-        return redirect()->route('admin')->with('message', $message);
+        return redirect()->route('admin', [$id_admin_room_911])->with('message', $message);
     }
 
     public function login(Request $request){
@@ -40,8 +46,9 @@ class AdminRoom911Controller extends Controller
         ]);
 
         $message = "";
-        $admin = Admin_room_911::where('username', $request->username)->where('password', $request->username)->first();
+        $admin = Admin_room_911::where('username', $request->username)->where('password', $request->password)->first();
         if ($admin != null){
+            setcookie($admin->username, "menu", time() + 300,'/'); #5 minutes per session
             return redirect()->route("menu", [$admin->id_admin_room_911]);
         }
         else {

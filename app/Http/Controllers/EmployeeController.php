@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Department;
+use App\Models\Admin_room_911;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -13,12 +14,18 @@ use League\Csv\Reader;
 class EmployeeController extends Controller
 {
     //
-    public function index(){
-        $departments = Department::all();
-        return view('employee.employee', ['departments' => $departments]);
+    public function index($id_admin_room_911){
+        $admin = Admin_room_911::find($id_admin_room_911);
+        if (isset($_COOKIE[$admin->username])){
+            $departments = Department::all();
+            return view('employee.employee', ['departments' => $departments, 'id_admin_room_911' => $id_admin_room_911]);
+        }
+        else{
+            return redirect('/');
+        }
     }
 
-    public function store(Request $request){
+    public function store(Request $request, $id_admin_room_911){
 
         $request->validate([
             'employeeid' => 'required|min:7',
@@ -36,7 +43,7 @@ class EmployeeController extends Controller
         $employee->save();
         $message = "Employee was created succesfully";
         
-        return redirect()->route('employee')->with('message', $message);
+        return redirect()->route('employee', [$id_admin_room_911])->with('message', $message);
     }
 
     #View update
@@ -68,16 +75,22 @@ class EmployeeController extends Controller
         return redirect()->route('update', [$id_employee])->with('message', $message);
     }
 
-    public function importView(){
-        return view('import.import');
+    public function importView($id_admin_room_911){
+        $admin = Admin_room_911::find($id_admin_room_911);
+        if (isset($_COOKIE[$admin->username])){
+            return view('import.import', ['id_admin_room_911' => $id_admin_room_911]);
+        }
+        else{
+            return redirect('/');
+        }
     }
 
-    public function uploadEmployees(Request $request){
+    public function uploadEmployees(Request $request, $id_admin_room_911){
         if ($request->file->isValid()){
             $import = new EmployeesImport();
             Excel::import($import, $request->file);
         }
         $message = "Employees imported successfully";
-        return redirect()->route('import')->with("message", $message);
+        return redirect()->route('import', [$id_admin_room_911])->with("message", $message);
     }
 }

@@ -13,18 +13,16 @@
 </head>
 <body>
     <div class="container w-25 border p-4 mt-5">
+        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
         @if(session("message"))
-            <input class='btn btn-info' onClick="history.go(-2);" value="Back" id="back">
             <div class="alert alert-success" role="alert">
                 {{session('message')}}
             </div>
-        @else
-            <input class='btn btn-info' onClick="history.go(-1);" value="Back" id="back">
         @endif
         <br>
         <p>Register employees by CSV file</p>
         <br>
-        <form action="{{ route('employee-upload') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('employee-upload', ['id_admin_room_911' => $id_admin_room_911]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-2">    
                 <!--<label for="file" class="form-label">Load employees by csv file</label>-->

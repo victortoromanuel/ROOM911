@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\Admin_room_911;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -26,5 +29,16 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('admin-room-911', function($user){
+            $gate = false;
+            $admin_room_911 = Admin_room_911::find($user->id_admin_room_911);
+            if (!is_null($admin_room_911)){
+                $gate = true;
+            }
+            else{
+                $gate = false;
+            }
+            return $gate;
+        });
     }
 }
