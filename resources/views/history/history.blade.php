@@ -21,11 +21,11 @@
                 <div class="col-2">Initial access date</div>
                 <div class="col-2">Final access date</div>
             </div>
-            <form action="{{ route('history-filter', ['id_employee' => $employee->id_employee]) }}" method="POST">
+            <form action="{{ route('history-filter', ['id_admin_room_911' => $id_admin_room_911, 'id_employee' => $employee->id_employee]) }}" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-2">
-                        <input class='btn btn-info' onClick="history.go(-1);" value="Back" id="back">
+                        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
                     </div>
                     <div class="col-2">
                         <input id="date1" name="date1" onchange="requiredTrue('date2')" class="form-control" type="date" placeholder="Initial access date">
@@ -37,7 +37,7 @@
                         <button id="button" type="submit" class="btn btn-secondary">Filter</button>
                     </div>
                     <div class="col-2">
-                        <a class='btn btn-primary' href='{{url("history/$employee->id_employee/?export=1")}}'>Export PDF</a>
+                        <a class='btn btn-primary' href='{{url("history/$id_admin_room_911/$employee->id_employee/?export=1")}}'>Export PDF</a>
                     </div>
                 </div>
             </form>

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -21,6 +22,17 @@ return new class extends Migration
 
             $table->foreignId('id_employee')->references('id_employee')->on('employees');
         });
+
+        DB::table('admin_room_911s')->insert(
+            array(
+                'id_admin_room_911' => 1,
+                'username' => 'admin',
+                'password' => 'admin',
+                'created_at' => '2022-11-14 19:35:18',
+                'updated_at' => '2022-11-14 19:35:18',
+                'id_employee' => 1,
+            )
+        );
     }
 
     /**

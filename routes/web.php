@@ -65,8 +65,8 @@ Route::delete('/delete/{id_employee}/{id_admin_room_911}', [MenuController::clas
     return view('history.history');
 });*/
 
-Route::get('history/{id_employee}', [MenuController::class, 'historyView'])->name('history');
+Route::get('history/{id_admin_room_911}/{id_employee}', [MenuController::class, 'historyView'])->name('history');
 
 #Route::get('history-export/{id_employee}', [MenuController::class, 'historyExport'])->name('history');
 
-Route::post('history/{id_employee}', [MenuController::class, 'accessFilter'])->name('history-filter');
+Route::post('history/{id_admin_room_911}/{id_employee}', [MenuController::class, 'accessFilter'])->name('history-filter');

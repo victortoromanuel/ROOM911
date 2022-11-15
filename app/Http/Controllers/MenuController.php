@@ -50,7 +50,8 @@ class MenuController extends Controller
                 $info[3] = $employees[$i]->lastname;
                 $info[4] = $get_department->department_name;
                 $info[5] = count($access);
-                $info[6] = $i;
+                $info[6] = ($employees[$i]->access == 1) ? 'Accepted' : 'Denied';
+                $info[7] = $i;
                 $employees_array[$i] = $info;
             }
             
@@ -115,19 +116,25 @@ class MenuController extends Controller
         return redirect()->route('menu', [$id_admin_room_911])->with("message", $message)->with("alert", $alert);
     }
 
-    public function historyView(Request $request, $id_employee){
-        $employee = Employee::find($id_employee);
-        $accesses = Access::where('id_employee', $id_employee)->get();
+    public function historyView(Request $request, $id_admin_room_911, $id_employee){
+        $admin = Admin_room_911::find($id_admin_room_911);
+        if (isset($_COOKIE[$admin->username])){
+            $employee = Employee::find($id_employee);
+            $accesses = Access::where('id_employee', $id_employee)->get();
 
-        $n_access = count($accesses->toArray());
-        if($request->get("export")==1){
-            $data = ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access];
-            $pdf = Pdf::loadView('history.history', $data);
-            ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
-            set_time_limit(300);
-            return $pdf->download('accesses.pdf');
+            $n_access = count($accesses->toArray());
+            if($request->get("export")==1){
+                $data = ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access];
+                $pdf = Pdf::loadView('history.history', $data);
+                ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
+                set_time_limit(300);
+                return $pdf->download('accesses.pdf');
+            }
+            return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access, 'id_admin_room_911' => $id_admin_room_911]);
         }
-        return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access]);
+        else{
+            return redirect('/');
+        }
     }
 
     public $accesses_filtered = null;

@@ -101,8 +101,12 @@ class EmployeeController extends Controller
         if ($request->file->isValid()){
             $import = new EmployeesImport();
             Excel::import($import, $request->file);
+            $message = "Employees imported successfully";
         }
-        $message = "Employees imported successfully";
+        else {
+            $message = "An error occured";
+        }
+        
         return redirect()->route('import', [$id_admin_room_911])->with("message", $message);
     }
 }

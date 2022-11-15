@@ -91,16 +91,18 @@
                         <th style="width:13%">Lastname</th>
                         <th>Department</th>
                         <th style="width:10%">Total access</th>
+                        <th style="width:10%">Access status</th>
                         <th style="width:40%">Actions</th>
                     </tr>
                     @foreach ($employees_array as $employee)
-                        @if ($employee[6] % 2 == 0)
+                        @if ($employee[7] % 2 == 0)
                             <tr>
                                 <td class="table-active">{{ $employee[1] }}</td>
                                 <td class="table-active">{{ $employee[2] }}</td>
                                 <td class="table-active">{{ $employee[3] }}</td>
                                 <td class="table-active">{{ $employee[4] }}</td>
                                 <td class="table-active">{{ $employee[5] }}</td>
+                                <td class="table-active">{{ $employee[6] }}</td>
                                 <td style='white-space: nowrap' class="table-active">
                                 <div class="d-flex">
                                     <a type="button" href="/update/{{ $id_admin_room_911 }}/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
@@ -114,7 +116,7 @@
                                         @csrf
                                         <button type="submit" class="btn btn-danger btn-md mx-3">Disable</button>
                                     </form>
-                                    <a type="button" href="/history/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
+                                    <a type="button" href="/history/{{ $id_admin_room_911 }}/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
                                     <form action="/delete/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
                                         @method('DELETE')
                                         @csrf
@@ -129,6 +131,7 @@
                                 <td>{{ $employee[3] }}</td>
                                 <td>{{ $employee[4] }}</td>
                                 <td>{{ $employee[5] }}</td>
+                                <td>{{ $employee[6] }}</td>
                                 <td style='white-space: nowrap'>
                                 <div class="d-flex">
                                     <a type="button" href="/update/{{ $id_admin_room_911 }}/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
@@ -142,7 +145,7 @@
                                         @csrf
                                         <button type="submit" class="btn btn-danger btn-md mx-3">Disable</button>
                                     </form>
-                                    <a type="button" href="/history/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
+                                    <a type="button" href="/history/{{ $id_admin_room_911 }}/{{ $employee[0] }}" class="btn btn-warning btn-md mx-3">History</a>
                                     <form action="/delete/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
                                         @method('DELETE')
                                         @csrf
