@@ -33,8 +33,11 @@
                     <div class="col-2">
                         <input id="date2" name="date2" onchange="requiredTrue('date1')" class="form-control" type="date" placeholder="Final access date">
                     </div>
-                    <div class="col-2">
+                    <div class="col-1">
                         <button id="button" type="submit" class="btn btn-secondary">Filter</button>
+                    </div>
+                    <div class="col-2">
+                    <a class='btn btn-secondary' href='{{url("history/$id_admin_room_911/$employee->id_employee/?export=2")}}'>Clear filter</a>
                     </div>
                     <div class="col-2">
                         <a class='btn btn-primary' href='{{url("history/$id_admin_room_911/$employee->id_employee/?export=1")}}'>Export PDF</a>

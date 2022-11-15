@@ -124,7 +124,24 @@ class MenuController extends Controller
         $admin = Admin_room_911::find($id_admin_room_911);
         if (isset($_COOKIE[$admin->username])){
             $employee = Employee::find($id_employee);
-            $accesses = Access::where('id_employee', $id_employee)->get();
+
+            //Clear filter
+            if($request->get("export")==2){
+                session(['date1' => null]);
+                session(['date2' => null]);
+            }
+
+            $date1 = session('date1');
+            $date2 = session('date2');
+
+            $date_flag = is_null($date1) and is_null($date2);
+
+            if ($date_flag){
+                $accesses = Access::where('id_employee', $id_employee)->get();
+            }
+            else {
+                $accesses = Access::whereBetween('attempt_datetime', [$date1, $date2])->where('id_employee', $id_employee)->get();
+            }
 
             $n_access = count($accesses->toArray());
             if($request->get("export")==1){
@@ -134,6 +151,8 @@ class MenuController extends Controller
                 set_time_limit(300);
                 return $pdf->download('accesses.pdf');
             }
+
+
             return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access, 'id_admin_room_911' => $id_admin_room_911]);
         }
         else{
@@ -144,7 +163,7 @@ class MenuController extends Controller
     public $accesses_filtered = null;
 
     //POST Access history filter
-    public function accessFilter(Request $request, $id_employee){
+    public function accessFilter(Request $request, $id_admin_room_911, $id_employee){
         $employee = Employee::find($id_employee);
         $accesses = Access::where('id_employee', $id_employee)->get();
         $date_flag = is_null($request->date1) and is_null($request->date2);
@@ -152,10 +171,13 @@ class MenuController extends Controller
         if (!$date_flag){
             $accesses = Access::whereBetween('attempt_datetime', [$request->date1, $request->date2])->where('id_employee', $id_employee)->get();
             $n_access = count($accesses->toArray());
+            #$this->historyView($request, $id_admin_room_911, );
+            session(['date1' => $request->date1]);
+            session(['date2' => $request->date2]);
+            #return redirect()->route('history', [$id_admin_room_911, $id_employee, $request->date1, $request->date2]);
         }
 
         $this->accesses_filtered = $accesses;
-
-        return view('history.history', ['employee' => $employee, 'accesses' => $accesses, 'n_access' => $n_access]);
+        return redirect()->route('history', [$id_admin_room_911, $id_employee]);
     }
 }
