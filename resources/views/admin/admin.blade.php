@@ -13,9 +13,8 @@
 </head>
 <body>
     <div class="container w-25 border p-5 mt-4">
-    <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
-        @if(session("message"))
-            <div class="alert alert-success" role="alert">
+        @if(session("message") && session("alert"))
+            <div class="alert alert-{{ session('alert') }}" role="alert">
                 {{session('message')}}
             </div>
         @endif
@@ -46,7 +45,9 @@
                 <input type="password" class="form-control" id="confirm" name="confirm">
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
-            </form>
+        </form>
+        <br>
+        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
     </div>
 </body>
 </html>

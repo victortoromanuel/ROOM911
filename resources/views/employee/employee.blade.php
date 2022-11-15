@@ -13,13 +13,11 @@
 </head>
 <body>
     <div class="container w-25 border p-4 mt-6">
-        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
         @if(session("message"))
             <div class="alert alert-success" role="alert">
                 {{session('message')}}
             </div>
         @endif
-        <br>
         <p>Register employee</p>
         <br>
         <form action="{{ route('employee-store', ['id_admin_room_911' => $id_admin_room_911]) }}" method="POST">
@@ -53,7 +51,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
-        
+        <br>
+        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
     </div>
 </body>
 </html>

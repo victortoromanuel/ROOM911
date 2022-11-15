@@ -33,29 +33,41 @@ class EmployeeController extends Controller
             'lastname' => 'required|min:3'
         ]);
 
-        $employee = new Employee();
-        $employee->id_number = (int) $request->employeeid;
-        $employee->firstname = $request->firstname;
-        $employee->lastname = $request->lastname;
-        $employee->id_department = (int) $request->department;
-        $employee->access = (int) $request->access;
+        $verify_employee = Employee::where('id_employee', $request->employeeid);
+        if (is_null($verify_employee)){
+            $employee = new Employee();
+            $employee->id_number = (int) $request->employeeid;
+            $employee->firstname = $request->firstname;
+            $employee->lastname = $request->lastname;
+            $employee->id_department = (int) $request->department;
+            $employee->access = (int) $request->access;
 
-        $employee->save();
-        $message = "Employee was created succesfully";
-        
-        return redirect()->route('employee', [$id_admin_room_911])->with('message', $message);
+            $employee->save();
+            $message = "Employee was created succesfully";
+            $alert = "success";
+        }
+        else {
+            $message = "The employee is already registered";
+            $alert = "danger";
+        }
+        return redirect()->route('employee', [$id_admin_room_911])->with('message', $message)->with("alert", $alert);
     }
 
     #View update
-    public function show($id_employee){
-        $departments = Department::all();
-        $employee = Employee::find($id_employee);
-        $id_department = Department::find($employee->id_department);
-    
-        return view('update.update', ['departments' => $departments, 'employee' => $employee, 'id_department' => $id_department]);
+    public function show($id_admin_room_911, $id_employee){
+        $admin = Admin_room_911::find($id_admin_room_911);
+        if (isset($_COOKIE[$admin->username])){
+            $departments = Department::all();
+            $employee = Employee::find($id_employee);
+            $id_department = Department::find($employee->id_department);
+            return view('update.update', ['departments' => $departments, 'employee' => $employee, 'id_department' => $id_department, 'id_admin_room_911' => $id_admin_room_911]);
+        }
+        else{
+            return redirect('/');
+        }
     }
 
-    public function update(Request $request, $id_employee){
+    public function update(Request $request, $id_admin_room_911, $id_employee){
 
         /*$request->validate([
             'employeeid' => 'required|min:7',
@@ -72,7 +84,7 @@ class EmployeeController extends Controller
 
         $employee->save();
         $message = "Employees was updated succesfully";
-        return redirect()->route('update', [$id_employee])->with('message', $message);
+        return redirect()->route('update', [$id_admin_room_911, $id_employee])->with('message', $message);
     }
 
     public function importView($id_admin_room_911){

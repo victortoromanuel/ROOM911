@@ -9,5 +9,8 @@ body {
 }
 
 #back {
-    left: 0;
+    height: 35px;
+    line-height: 30px;
+    right: 115px;
+    top: 225px;
 }

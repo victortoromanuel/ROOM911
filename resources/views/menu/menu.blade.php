@@ -103,7 +103,7 @@
                                 <td class="table-active">{{ $employee[5] }}</td>
                                 <td style='white-space: nowrap' class="table-active">
                                 <div class="d-flex">
-                                    <a type="button" href="/update/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
+                                    <a type="button" href="/update/{{ $id_admin_room_911 }}/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
                                     <form action="/enable/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
                                         @method('PATCH')
                                         @csrf
@@ -131,7 +131,7 @@
                                 <td>{{ $employee[5] }}</td>
                                 <td style='white-space: nowrap'>
                                 <div class="d-flex">
-                                    <a type="button" href="/update/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
+                                    <a type="button" href="/update/{{ $id_admin_room_911 }}/{{ $employee[0] }}" class="btn btn-secondary btn-md mx-3">Update</a>
                                     <form action="/enable/{{ $employee[0] }}/{{ $id_admin_room_911 }}" method="POST">
                                         @method('PATCH')
                                         @csrf

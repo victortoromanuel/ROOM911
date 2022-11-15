@@ -39,9 +39,9 @@ Route::get('/employee/{id_admin_room_911}', [EmployeeController::class, 'index']
 
 Route::post('/employee/{id_admin_room_911}', [EmployeeController::class, 'store'])->name('employee-store');
 
-Route::get('/update/{id_employee}', [EmployeeController::class, 'show'])->name('update');
+Route::get('/update/{id_admin_room_911}/{id_employee}', [EmployeeController::class, 'show'])->name('update');
 
-Route::patch('/update/{id_employee}', [EmployeeController::class, 'update'])->name('update-update');
+Route::patch('/update/{id_admin_room_911}/{id_employee}', [EmployeeController::class, 'update'])->name('update-update');
 
 Route::get('/admin/{id_admin_room_911}', [AdminRoom911Controller::class, 'index'])->name('admin');
 

@@ -28,15 +28,24 @@ class AdminRoom911Controller extends Controller
             'username' => 'required|min:4',
             'password' => 'required|min:4'
         ]);
-        #$id_admin_room_911 = $request->key;
-        $admin = new Admin_room_911();
-        $admin->id_employee = (int) $request->employeeid;
-        $admin->username = $request->username;
-        $admin->password = $request->password;
 
-        $admin->save();
-        $message = "Administrator of ROOM 911 was created succesfully";
-        return redirect()->route('admin', [$id_admin_room_911])->with('message', $message);
+        $verify_admin = Admin_room_911::where('id_employee', $request->employeeid);
+        if (is_null($verify_admin)){
+            $admin = new Admin_room_911();
+            $admin->id_employee = (int) $request->employeeid;
+            $admin->username = $request->username;
+            $admin->password = $request->password;
+
+            $admin->save();
+            $message = "Administrator of ROOM 911 was created succesfully";
+            $alert = "success";
+        }
+        else{
+            $message = "The employee is already an administrator";
+            $alert = "danger";
+        }
+        
+        return redirect()->route('admin', [$id_admin_room_911])->with('message', $message)->with("alert", $alert);
     }
 
     public function login(Request $request){

@@ -13,7 +13,6 @@
 </head>
 <body>
     <div class="container w-25 border p-4 mt-5">
-        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
         @if(session("message"))
             <div class="alert alert-success" role="alert">
                 {{session('message')}}
@@ -31,6 +30,7 @@
                 <button type="submit" id="load" class="btn btn-primary">Load csv file</button>
             </div>
         </form>
+        <a class='btn btn-info' href="/menu/{{ $id_admin_room_911 }}">Back</a>
     </div>
 </body>
 </html>
