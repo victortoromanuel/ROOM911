@@ -30,8 +30,8 @@ class AdminRoom911Controller extends Controller
             'password' => 'required|min:4'
         ]);
 
-        $verify_admin = Admin_room_911::where('id_employee', $request->employeeid);
-        if (is_null($verify_admin)){
+        $verify_admin = Admin_room_911::where('id_employee', $request->employeeid)->get()->toArray();
+        if (count($verify_admin) == 0){
             $admin = new Admin_room_911();
             $admin->id_employee = (int) $request->employeeid;
             $admin->username = $request->username;

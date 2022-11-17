@@ -13,8 +13,8 @@
 </head>
 <body>
     <div class="container w-25 border p-4 mt-6">
-        @if(session("message"))
-            <div class="alert alert-success" role="alert">
+        @if(session("message") && session("alert"))
+            <div class="alert alert-{{ session('alert') }}" role="alert">
                 {{session('message')}}
             </div>
         @endif

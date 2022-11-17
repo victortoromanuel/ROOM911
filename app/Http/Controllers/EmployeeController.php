@@ -34,8 +34,8 @@ class EmployeeController extends Controller
             'lastname' => 'required|min:3'
         ]);
 
-        $verify_employee = Employee::where('id_employee', $request->employeeid);
-        if (is_null($verify_employee)){
+        $verify_employee = Employee::where('id_number', $request->employeeid)->get()->toArray();
+        if (count($verify_employee) == 0){
             $employee = new Employee();
             $employee->id_number = (int) $request->employeeid;
             $employee->firstname = $request->firstname;
